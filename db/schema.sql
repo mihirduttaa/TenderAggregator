@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS vector;
+
 CREATE TABLE IF NOT EXISTS tenders (
     id                  SERIAL PRIMARY KEY,
     tender_id           VARCHAR(200) UNIQUE,
@@ -15,6 +17,7 @@ CREATE TABLE IF NOT EXISTS tenders (
     status              VARCHAR(50) DEFAULT 'active',
     source_portal       VARCHAR(100) DEFAULT 'mptenders',
     raw_data            JSONB,
+    embedding           vector(1536),       -- OpenAI text-embedding-3-small
     created_at          TIMESTAMP DEFAULT NOW(),
     updated_at          TIMESTAMP DEFAULT NOW()
 );
@@ -23,6 +26,7 @@ CREATE INDEX IF NOT EXISTS idx_category   ON tenders(work_category);
 CREATE INDEX IF NOT EXISTS idx_deadline   ON tenders(submission_deadline);
 CREATE INDEX IF NOT EXISTS idx_department ON tenders(department);
 CREATE INDEX IF NOT EXISTS idx_status     ON tenders(status);
+CREATE INDEX IF NOT EXISTS idx_embedding  ON tenders USING ivfflat (embedding vector_cosine_ops);
 
 ALTER TABLE tenders
     ADD COLUMN IF NOT EXISTS tender_type          VARCHAR(100),
@@ -42,4 +46,5 @@ ALTER TABLE tenders
     ADD COLUMN IF NOT EXISTS doc_download_end     TIMESTAMP,
     ADD COLUMN IF NOT EXISTS nit_documents        JSONB,
     ADD COLUMN IF NOT EXISTS work_documents       JSONB,
-    ADD COLUMN IF NOT EXISTS inviting_authority   JSONB;
+    ADD COLUMN IF NOT EXISTS inviting_authority   JSONB,
+    ADD COLUMN IF NOT EXISTS embedding           vector(1536);

@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TenderSetu — MP Government Tenders</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #0f1117;
+    --ink-soft: #3d4152;
+    --ink-muted: #7b8194;
+    --paper: #f7f5f0;
+    --paper-warm: #eeeae0;
+    --paper-card: #ffffff;
+    --saffron: #e8821a;
+    --saffron-light: #fdf0e0;
+    --saffron-dark: #c4680d;
+    --green: #1a7a4a;
+    --green-light: #e0f5ea;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --blue: #1a4fa8;
+    --blue-light: #e0eaf5;
+    --border: #ddd9ce;
+    --shadow-sm: 0 1px 3px rgba(15,17,23,0.06), 0 1px 2px rgba(15,17,23,0.04);
+    --shadow-md: 0 4px 16px rgba(15,17,23,0.08), 0 2px 6px rgba(15,17,23,0.05);
+    --shadow-lg: 0 12px 40px rgba(15,17,23,0.12), 0 4px 12px rgba(15,17,23,0.06);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: white;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-dot {
+    width: 10px; height: 10px;
+    background: var(--saffron);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .header-meta {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+  }
+
+  /* ── HERO SEARCH ── */
+  .hero {
+    background: var(--ink);
+    padding: 40px 32px 32px;
+    color: white;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .hero-sub {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+
+  .search-bar {
+    display: flex;
+    gap: 10px;
+    max-width: 720px;
+  }
+
+  .search-input-wrap {
+    flex: 1;
+    position: relative;
+  }
+
+  .search-input-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.4);
+    pointer-events: none;
+  }
+
+  #searchInput {
+    width: 100%;
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius);
+    padding: 13px 16px 13px 44px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  #searchInput::placeholder { color: rgba(255,255,255,0.35); }
+
+  #searchInput:focus {
+    border-color: var(--saffron);
+    background: rgba(255,255,255,0.13);
+    box-shadow: 0 0 0 3px rgba(232,130,26,0.2);
+  }
+
+  .search-btn {
+    background: var(--saffron);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 13px 24px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  .search-btn:hover { background: var(--saffron-dark); transform: translateY(-1px); }
+  .search-btn:active { transform: translateY(0); }
+
+  .search-mode {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    align-items: center;
+  }
+
+  .mode-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+  }
+
+  .mode-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.6);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .mode-btn.active {
+    background: var(--saffron);
+    border-color: var(--saffron);
+    color: white;
+  }
+
+  /* ── FILTERS BAR ── */
+  .filters-bar {
+    background: var(--paper-card);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 60px;
+    z-index: 90;
+  }
+
+  .filter-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .filter-select {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+    font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237b8194' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+  }
+
+  .filter-select:focus { border-color: var(--saffron); }
+
+  .filter-input {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+    font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    outline: none;
+    width: 130px;
+    transition: border-color 0.15s;
+  }
+
+  .filter-input:focus { border-color: var(--saffron); }
+  .filter-input::placeholder { color: var(--ink-muted); font-size: 0.8rem; }
+
+  .clear-btn {
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    margin-left: auto;
+  }
+
+  .clear-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── MAIN LAYOUT ── */
+  .main-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 32px;
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .results-count {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+  }
+
+  .results-count strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ── TENDER CARD ── */
+  .tender-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .tender-card {
+    background: var(--paper-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .tender-card:hover {
+    border-color: var(--saffron);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .tender-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--border);
+    transition: background 0.2s;
+  }
+
+  .tender-card:hover::before { background: var(--saffron); }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .card-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--saffron);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .card-dept {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    margin-bottom: 14px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meta-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+
+  .meta-value {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .meta-value.deadline {
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .meta-value.deadline.safe { color: var(--green); }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .tag-category {
+    background: var(--saffron-light);
+    color: var(--saffron-dark);
+    border: 1px solid rgba(232,130,26,0.2);
+  }
+
+  .tag-type {
+    background: var(--blue-light);
+    color: var(--blue);
+    border: 1px solid rgba(26,79,168,0.15);
+  }
+
+  .tag-emd {
+    background: var(--green-light);
+    color: var(--green);
+    border: 1px solid rgba(26,122,74,0.15);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-view {
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 7px 16px;
+    font-size: 0.78rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-view:hover { background: var(--saffron); }
+
+  .btn-portal {
+    background: none;
+    color: var(--ink-muted);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    font-size: 0.78rem;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s;
+  }
+
+  .btn-portal:hover { border-color: var(--ink-muted); color: var(--ink); }
+
+  /* ── DETAIL MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,17,23,0.6);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--paper-card);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--paper-card);
+    z-index: 10;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--ink-muted);
+    transition: all 0.15s;
+  }
+
+  .modal-close:hover { background: var(--red-light); color: var(--red); }
+
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+    padding-right: 40px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .modal-id {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    font-family: monospace;
+  }
+
+  .modal-body { padding: 24px 28px; }
+
+  .detail-section {
+    margin-bottom: 24px;
+  }
+
+  .detail-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .detail-item { display: flex; flex-direction: column; gap: 3px; }
+
+  .detail-item-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+
+  .detail-item-value {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .detail-item-value.highlight {
+    font-size: 1.1rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    color: var(--saffron);
+  }
+
+  .detail-item-value.mono {
+    font-family: monospace;
+    font-size: 0.82rem;
+    background: var(--paper);
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .work-desc {
+    background: var(--paper);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    border-left: 3px solid var(--saffron);
+  }
+
+  .doc-list { display: flex; flex-direction: column; gap: 6px; }
+
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--paper);
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
+  .doc-icon { font-size: 1rem; }
+
+  .modal-footer {
+    padding: 16px 28px 24px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-primary {
+    flex: 1;
+    background: var(--saffron);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover { background: var(--saffron-dark); }
+
+  /* ── LOADING / EMPTY STATES ── */
+  .state-box {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-muted);
+  }
+
+  .state-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .state-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
+  .state-sub { font-size: 0.85rem; font-weight: 300; }
+
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--saffron);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── PAGINATION ── */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 32px 0;
+    align-items: center;
+  }
+
+  .page-btn {
+    background: var(--paper-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    color: var(--ink-soft);
+  }
+
+  .page-btn:hover { border-color: var(--saffron); color: var(--saffron); }
+  .page-btn.active { background: var(--saffron); border-color: var(--saffron); color: white; font-weight: 600; }
+  .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── CATEGORY PILLS ── */
+  .category-strip {
+    display: flex;
+    gap: 8px;
+    padding: 14px 32px;
+    overflow-x: auto;
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+
+  .category-strip::-webkit-scrollbar { display: none; }
+
+  .cat-pill {
+    white-space: nowrap;
+    background: var(--paper-card);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    transition: all 0.15s;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cat-pill:hover { border-color: var(--saffron); color: var(--saffron); }
+  .cat-pill.active { background: var(--saffron); border-color: var(--saffron); color: white; }
+
+  .cat-count {
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 0.7rem;
+  }
+
+  .cat-pill.active .cat-count { background: rgba(255,255,255,0.25); }
+
+  @media (max-width: 640px) {
+    header, .hero, .filters-bar, .category-strip, .main-wrap { padding-left: 16px; padding-right: 16px; }
+    .search-bar { flex-direction: column; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .card-top { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    TenderSetu
+  </div>
+  <div class="header-meta">Madhya Pradesh Government Tenders</div>
+</header>
+
+<div class="hero">
+  <div class="hero-title">Find Government Tenders,<br>Faster.</div>
+  <div class="hero-sub">Search across all MP departments in one place</div>
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Try: road construction Bhopal, water pipeline, school building..." autocomplete="off"/>
+    </div>
+    <button class="search-btn" onclick="doSearch()">Search</button>
+  </div>
+  <div class="search-mode">
+    <span class="mode-label">Mode:</span>
+    <button class="mode-btn active" id="modeKeyword" onclick="setMode('keyword')">Keyword</button>
+    <button class="mode-btn" id="modeSemantic" onclick="setMode('semantic')">Smart Search (AI)</button>
+  </div>
+</div>
+
+<div class="category-strip" id="categoryStrip">
+  <button class="cat-pill active" onclick="selectCategory('')" data-cat="">All Tenders</button>
+</div>
+
+<div class="filters-bar">
+  <span class="filter-label">Filters:</span>
+  <select class="filter-select" id="filterLocation" onchange="doSearch()">
+    <option value="">Any Location</option>
+  </select>
+  <input type="number" class="filter-input" id="filterMaxEmd" placeholder="Max EMD (₹)" onchange="doSearch()"/>
+  <input type="number" class="filter-input" id="filterMinValue" placeholder="Min Value (₹)" onchange="doSearch()"/>
+  <button class="clear-btn" onclick="clearFilters()">✕ Clear Filters</button>
+</div>
+
+<div class="main-wrap">
+  <div class="results-header">
+    <div class="results-count" id="resultsCount">Loading tenders...</div>
+  </div>
+  <div class="tender-grid" id="tenderGrid"></div>
+  <div class="pagination" id="pagination"></div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">—</div>
+      <div class="modal-id" id="modalId">—</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <a class="btn-primary" id="modalPortalLink" href="#" target="_blank">
+        ↗ Open on MP Tenders Portal
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8000';
+let currentMode = 'keyword';
+let currentCategory = '';
+let currentPage = 1;
+let totalResults = 0;
+const PAGE_SIZE = 20;
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', () => {
+  loadCategories();
+  doSearch();
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+});
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('modeKeyword').classList.toggle('active', mode === 'keyword');
+  document.getElementById('modeSemantic').classList.toggle('active', mode === 'semantic');
+  doSearch();
+}
+
+function selectCategory(cat) {
+  currentCategory = cat;
+  currentPage = 1;
+  document.querySelectorAll('.cat-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.cat === cat);
+  });
+  doSearch();
+}
+
+async function loadCategories() {
+  try {
+    const res = await fetch(`${API}/tenders?limit=1000&offset=0`);
+    const data = await res.json();
+    const counts = {};
+    data.forEach(t => {
+      if (t.details && t.details.tender_category) {
+        const c = t.details.product_category || 'Other';
+        counts[c] = (counts[c] || 0) + 1;
+      }
+    });
+
+    // Try dedicated categories endpoint
+    const catRes = await fetch(`${API}/categories`).catch(() => null);
+    if (catRes && catRes.ok) {
+      const cats = await catRes.json();
+      const strip = document.getElementById('categoryStrip');
+      cats.slice(0, 12).forEach(c => {
+        const pill = document.createElement('button');
+        pill.className = 'cat-pill';
+        pill.dataset.cat = c.work_category;
+        pill.onclick = () => selectCategory(c.work_category);
+        pill.innerHTML = `${c.work_category} <span class="cat-count">${c.count}</span>`;
+        strip.appendChild(pill);
+      });
+    }
+  } catch(e) {
+    // categories endpoint may not exist yet
+  }
+}
+
+async function doSearch() {
+  currentPage = 1;
+  await fetchTenders();
+}
+
+async function fetchTenders() {
+  const q = document.getElementById('searchInput').value.trim();
+  const maxEmd = document.getElementById('filterMaxEmd').value;
+  const minValue = document.getElementById('filterMinValue').value;
+
+  showLoading();
+
+  try {
+    let url, data;
+    const offset = (currentPage - 1) * PAGE_SIZE;
+
+    if (currentMode === 'semantic' && q) {
+      let params = `q=${encodeURIComponent(q)}&limit=${PAGE_SIZE}`;
+      if (currentCategory) params += `&category=${encodeURIComponent(currentCategory)}`;
+      if (maxEmd) params += `&max_emd=${maxEmd}`;
+      const res = await fetch(`${API}/tenders/search?${params}`);
+      data = await res.json();
+      totalResults = data.length;
+      renderTenders(data, false);
+    } else {
+      let params = `limit=${PAGE_SIZE}&offset=${offset}`;
+      if (q) params += `&search=${encodeURIComponent(q)}`;
+      if (currentCategory) params += `&category=${encodeURIComponent(currentCategory)}`;
+      if (maxEmd) params += `&max_emd=${maxEmd}`;
+      if (minValue) params += `&min_value=${minValue}`;
+      const res = await fetch(`${API}/tenders?${params}`);
+      data = await res.json();
+
+      // Check if response has total wrapper or is array
+      if (Array.isArray(data)) {
+        totalResults = data.length;
+        renderTenders(data, true);
+      } else {
+        totalResults = data.total || data.length;
+        renderTenders(Array.isArray(data.results) ? data.results : data, true);
+      }
+    }
+  } catch(e) {
+    showError(e);
+  }
+}
+
+function showLoading() {
+  document.getElementById('tenderGrid').innerHTML = `
+    <div class="state-box">
+      <div class="spinner"></div>
+      <div class="state-title">Searching tenders...</div>
+    </div>`;
+  document.getElementById('pagination').innerHTML = '';
+  document.getElementById('resultsCount').textContent = 'Searching...';
+}
+
+function showError(e) {
+  document.getElementById('tenderGrid').innerHTML = `
+    <div class="state-box">
+      <div class="state-icon">⚠️</div>
+      <div class="state-title">Could not connect to API</div>
+      <div class="state-sub">Make sure the server is running at localhost:8000</div>
+    </div>`;
+}
+
+function renderTenders(tenders, showPagination) {
+  const grid = document.getElementById('tenderGrid');
+  const countEl = document.getElementById('resultsCount');
+
+  if (!tenders || tenders.length === 0) {
+    grid.innerHTML = `
+      <div class="state-box">
+        <div class="state-icon">🔍</div>
+        <div class="state-title">No tenders found</div>
+        <div class="state-sub">Try different keywords or clear filters</div>
+      </div>`;
+    countEl.innerHTML = 'No results found';
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  countEl.innerHTML = `Showing <strong>${tenders.length}</strong> tenders${totalResults > tenders.length ? ` of <strong>${totalResults}</strong>` : ''}`;
+
+  grid.innerHTML = '';
+  tenders.forEach((t, i) => {
+    const card = buildCard(t, i);
+    grid.appendChild(card);
+  });
+
+  if (showPagination && totalResults > PAGE_SIZE) {
+    renderPagination();
+  } else {
+    document.getElementById('pagination').innerHTML = '';
+  }
+}
+
+function buildCard(t, idx) {
+  const card = document.createElement('div');
+  card.className = 'tender-card';
+  card.style.animationDelay = `${idx * 30}ms`;
+
+  const d = t.details || {};
+  const deadline = t.submission_deadline ? new Date(t.submission_deadline) : null;
+  const now = new Date();
+  const daysLeft = deadline ? Math.ceil((deadline - now) / 86400000) : null;
+  const isUrgent = daysLeft !== null && daysLeft <= 7;
+
+  const valueStr = t.estimated_value
+    ? '₹' + formatNum(t.estimated_value)
+    : d.emd_amount ? 'EMD ₹' + formatNum(d.emd_amount) : '—';
+
+  const deadlineStr = deadline
+    ? deadline.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '—';
+
+  const dept = (t.department || '').split('||').pop() || t.department || '—';
+  const location = d.location || '—';
+  const category = d.work_category || d.product_category || '—';
+  const emdStr = d.emd_amount ? '₹' + formatNum(d.emd_amount) : '—';
+
+  card.innerHTML = `
+    <div class="card-top">
+      <div class="card-title">${cleanTitle(t.title)}</div>
+      <div class="card-value">${valueStr}</div>
+    </div>
+    <div class="card-dept">${dept}</div>
+    <div class="card-meta">
+      <div class="meta-item">
+        <span class="meta-label">Deadline</span>
+        <span class="meta-value deadline ${!isUrgent ? 'safe' : ''}">${deadlineStr}${daysLeft !== null ? ` (${daysLeft}d)` : ''}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">EMD</span>
+        <span class="meta-value">${emdStr}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Location</span>
+        <span class="meta-value">${location}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Ref No</span>
+        <span class="meta-value">${t.reference_no || '—'}</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="tags">
+        ${category !== '—' ? `<span class="tag tag-category">${category}</span>` : ''}
+        ${d.form_of_contract ? `<span class="tag tag-type">${d.form_of_contract}</span>` : ''}
+        ${d.emd_exemption === 'Yes' ? `<span class="tag tag-emd">EMD Exempt</span>` : ''}
+      </div>
+      <div class="card-actions">
+        <button class="btn-view" onclick="showDetail(event, '${t.tender_id}')">
+          Details ↗
+        </button>
+        ${t.tender_url ? `<a class="btn-portal" href="${t.tender_url}" target="_blank">Portal ↗</a>` : ''}
+      </div>
+    </div>`;
+
+  return card;
+}
+
+async function showDetail(e, tenderId) {
+  e.stopPropagation();
+  if (!tenderId) return;
+
+  document.getElementById('modalTitle').textContent = 'Loading...';
+  document.getElementById('modalBody').innerHTML = '<div class="state-box"><div class="spinner"></div></div>';
+  document.getElementById('modalOverlay').classList.add('open');
+
+  try {
+    const res = await fetch(`${API}/tenders/${tenderId}`);
+    const t = await res.json();
+    const d = t.details || {};
+
+    document.getElementById('modalTitle').textContent = cleanTitle(t.title);
+    document.getElementById('modalId').textContent = t.tender_id;
+    document.getElementById('modalPortalLink').href = t.tender_url || '#';
+
+    const deadline = t.submission_deadline ? new Date(t.submission_deadline).toLocaleString('en-IN') : '—';
+    const opening = t.opening_date ? new Date(t.opening_date).toLocaleString('en-IN') : '—';
+    const docStart = d.doc_download_start ? new Date(d.doc_download_start).toLocaleString('en-IN') : '—';
+    const docEnd = d.doc_download_end ? new Date(d.doc_download_end).toLocaleString('en-IN') : '—';
+
+    const docs = [...(d.nit_documents || []), ...(d.work_documents || [])];
+
+    document.getElementById('modalBody').innerHTML = `
+      <div class="detail-section">
+        <div class="detail-section-title">Work Description</div>
+        <div class="work-desc">${d.work_description || t.title}</div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Financial Details</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-item-label">Tender Value</span>
+            <span class="detail-item-value highlight">${t.estimated_value ? '₹' + formatNum(t.estimated_value) : '—'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">EMD Amount</span>
+            <span class="detail-item-value highlight">${d.emd_amount ? '₹' + formatNum(d.emd_amount) : '—'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Tender Fee</span>
+            <span class="detail-item-value">${d.tender_fee ? '₹' + formatNum(d.tender_fee) : '—'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">EMD Exemption</span>
+            <span class="detail-item-value">${d.emd_exemption || '—'}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Critical Dates</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-item-label">Bid Submission Deadline</span>
+            <span class="detail-item-value">${deadline}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Bid Opening</span>
+            <span class="detail-item-value">${opening}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Doc Download Start</span>
+            <span class="detail-item-value">${docStart}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Doc Download End</span>
+            <span class="detail-item-value">${docEnd}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Tender Details</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-item-label">Organisation</span>
+            <span class="detail-item-value">${(t.department || '').split('||').pop() || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Location</span>
+            <span class="detail-item-value">${d.location || '—'} ${d.pincode ? '(' + d.pincode + ')' : ''}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Contract Type</span>
+            <span class="detail-item-value">${d.form_of_contract || '—'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Period of Work</span>
+            <span class="detail-item-value">${d.period_of_work ? d.period_of_work + ' days' : '—'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Bid Validity</span>
+            <span class="detail-item-value">${d.bid_validity_days ? d.bid_validity_days + ' days' : '—'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Reference No</span>
+            <span class="detail-item-value">${t.reference_no || '—'}</span>
+          </div>
+        </div>
+      </div>
+
+      ${docs.length > 0 ? `
+      <div class="detail-section">
+        <div class="detail-section-title">Documents (${docs.length})</div>
+        <div class="doc-list">
+          ${docs.map(doc => `
+            <div class="doc-item">
+              <span class="doc-icon">${doc.toLowerCase().includes('.pdf') ? '📄' : doc.toLowerCase().includes('.xls') ? '📊' : '📎'}</span>
+              ${doc}
+            </div>`).join('')}
+        </div>
+      </div>` : ''}
+
+      ${d.inviting_authority_name ? `
+      <div class="detail-section">
+        <div class="detail-section-title">Inviting Authority</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-item-label">Name</span>
+            <span class="detail-item-value">${d.inviting_authority_name}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-label">Address</span>
+            <span class="detail-item-value">${d.inviting_authority_address || '—'}</span>
+          </div>
+        </div>
+      </div>` : ''}
+    `;
+  } catch(e) {
+    document.getElementById('modalBody').innerHTML = `<div class="state-box"><div class="state-icon">⚠️</div><div class="state-title">Could not load details</div></div>`;
+  }
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function renderPagination() {
+  const totalPages = Math.ceil(totalResults / PAGE_SIZE);
+  const pag = document.getElementById('pagination');
+  pag.innerHTML = '';
+
+  const prev = document.createElement('button');
+  prev.className = 'page-btn';
+  prev.textContent = '← Prev';
+  prev.disabled = currentPage === 1;
+  prev.onclick = () => { currentPage--; fetchTenders(); window.scrollTo(0, 400); };
+  pag.appendChild(prev);
+
+  const start = Math.max(1, currentPage - 2);
+  const end = Math.min(totalPages, start + 4);
+  for (let i = start; i <= end; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+    btn.textContent = i;
+    btn.onclick = (() => { const p = i; return () => { currentPage = p; fetchTenders(); window.scrollTo(0, 400); }; })();
+    pag.appendChild(btn);
+  }
+
+  const next = document.createElement('button');
+  next.className = 'page-btn';
+  next.textContent = 'Next →';
+  next.disabled = currentPage === totalPages;
+  next.onclick = () => { currentPage++; fetchTenders(); window.scrollTo(0, 400); };
+  pag.appendChild(next);
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterMaxEmd').value = '';
+  document.getElementById('filterMinValue').value = '';
+  document.getElementById('filterLocation').value = '';
+  currentCategory = '';
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.toggle('active', p.dataset.cat === ''));
+  doSearch();
+}
+
+function cleanTitle(title) {
+  return (title || '').replace(/^\[|\]$/g, '').trim();
+}
+
+function formatNum(n) {
+  if (!n) return '—';
+  if (n >= 10000000) return (n/10000000).toFixed(2) + ' Cr';
+  if (n >= 100000) return (n/100000).toFixed(2) + ' L';
+  return Number(n).toLocaleString('en-IN');
+}
+</script>
+</body>
+</html>
